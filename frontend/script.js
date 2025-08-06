@@ -1,5 +1,7 @@
+const API_URL = 'http://localhost:5000';
+
 async function fetchTasks() {
-  const response = await fetch('http://127.0.0.1:5000/tasks');
+  const response = await fetch(`${API_URL}/tasks`);
   const tasks = await response.json();
   const list = document.getElementById('task-list');
   list.innerHTML = '';
@@ -15,7 +17,7 @@ async function addTask() {
   const title = input.value;
   if (!title) return;
 
-  await fetch('http://127.0.0.1:5000/tasks', {
+  await fetch(`${API_URL}/tasks`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title })
@@ -26,3 +28,4 @@ async function addTask() {
 }
 
 window.onload = fetchTasks;
+
