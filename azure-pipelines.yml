@@ -37,3 +37,23 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+- stage: Deploy
+  displayName: Deploy to Azure App Service
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeployWebApp
+    displayName: Deploy Web App Container
+    environment: 'production'
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebAppContainer@1
+            displayName: 'Deploy Docker image to Azure App Service'
+            inputs:
+              azureSubscription: 'AzureServiceConnection'
+              appName: 'mulitiertaskapp'
+              imageName: '$(containerRegistry)/$(imageRepository):$(tag)'
