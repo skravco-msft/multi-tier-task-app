@@ -1,3 +1,4 @@
+import socket
 from flask import Flask, request, jsonify
 from models import init_db, add_task, get_tasks
 from flask_cors import CORS
@@ -5,6 +6,11 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 init_db()
+
+@app.route('/')
+def home():
+    hostname = socket.gethostname()
+    return f'Flask app is up and running on: {hostname}'
 
 @app.route('/tasks', methods=['GET'])
 def tasks():
@@ -19,4 +25,4 @@ def create_task():
     return jsonify({'message': 'Task added'}), 201
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=80)
